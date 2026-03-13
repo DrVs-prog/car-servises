@@ -50,7 +50,7 @@ namespace car_servises
 
             // PictureBox для CAPTCHA
             pictureBoxCaptcha = new PictureBox();
-            pictureBoxCaptcha.Location = new Point(50, 170);
+            pictureBoxCaptcha.Location = new Point(50, 220);
             pictureBoxCaptcha.Size = new Size(200, 60);
             pictureBoxCaptcha.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBoxCaptcha.BorderStyle = BorderStyle.FixedSingle;
@@ -59,7 +59,7 @@ namespace car_servises
 
             // TextBox для ввода CAPTCHA
             textBoxCaptcha = new TextBox();
-            textBoxCaptcha.Location = new Point(50, 240);
+            textBoxCaptcha.Location = new Point(50, 290);
             textBoxCaptcha.Size = new Size(200, 30);
             textBoxCaptcha.Font = AppStyles.NormalFont;
             textBoxCaptcha.Visible = false;
@@ -69,7 +69,7 @@ namespace car_servises
 
             // Кнопка обновления CAPTCHA
             btnRefreshCaptcha = new Button();
-            btnRefreshCaptcha.Location = new Point(260, 170);
+            btnRefreshCaptcha.Location = new Point(260, 220);
             btnRefreshCaptcha.Size = new Size(90, 60);
             btnRefreshCaptcha.Text = "Обновить";
             btnRefreshCaptcha.Font = AppStyles.NormalFont;
@@ -87,6 +87,16 @@ namespace car_servises
             lblTimer.TextAlign = ContentAlignment.MiddleCenter;
             lblTimer.Visible = false;
             this.Controls.Add(lblTimer);
+            textBoxCaptcha.KeyPress += textBoxCaptcha_KeyPress;
+        }
+
+        private void textBoxCaptcha_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                button1_Click(sender, e);
+                e.Handled = true;
+            }
         }
 
         private void ShowCaptchaControls(bool show)
@@ -240,15 +250,49 @@ namespace car_servises
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // Проверка блокировки
+            if (lockSecondsRemaining > 0)
+            {
+                MessageBox.Show($"Подождите {lockSecondsRemaining} секунд до следующей попытки!",
+                    "Блокировка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string username = textBox1.Text.Trim();
             string password = textBox2.Text;
 
             // Проверка на пустые значения
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Пожалуйста, заполните все поля!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Пожалуйста, заполните все поля!", "Внимание",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBox1.Focus();
                 return;
+            }
+
+            // Если показана CAPTCHA, проверяем её
+            if (showCaptcha)
+            {
+                string captchaInput = textBoxCaptcha.Text.Trim().ToUpper();
+
+                if (string.IsNullOrEmpty(captchaInput))
+                {
+                    MessageBox.Show("Пожалуйста, введите код с картинки!", "Внимание",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    textBoxCaptcha.Focus();
+                    return;
+                }
+
+                if (captchaInput != captchaGenerator.CurrentCaptchaText)
+                {
+                    failedAttempts++;
+                    MessageBox.Show("Неверный код CAPTCHA!", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    GenerateNewCaptcha();
+                    textBoxCaptcha.Clear();
+                    StartLockout(); // БЛОКИРУЕМ НА 10 СЕКУНД
+                    return;
+                }
             }
 
             // Хеширование пароля
@@ -258,15 +302,32 @@ namespace car_servises
             if (AuthenticateUser(username, hashedPassword))
             {
                 string role = GetRole(username);
-                MessageBox.Show($"Авторизация успешна! Ваша роль: {role}", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Авторизация успешна! Ваша роль: {role}", "Успех",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Открыть нужную форму в зависимости от роли (передаем username)
+                // Сбрасываем счетчик и скрываем CAPTCHA
+                failedAttempts = 0;
+                if (showCaptcha)
+                {
+                    ShowCaptchaControls(false);
+                }
+
                 OpenRoleForm(role, username);
             }
             else
             {
-                MessageBox.Show("Неверный логин или пароль!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                failedAttempts++;
+                MessageBox.Show("Неверный логин или пароль!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // После первой неудачной попытки показываем CAPTCHA
+                if (failedAttempts >= 1 && !showCaptcha)
+                {
+                    ShowCaptchaControls(true);
+                }
+
                 textBox2.Clear();
+                textBoxCaptcha.Clear();
                 textBox1.Focus();
             }
         }
