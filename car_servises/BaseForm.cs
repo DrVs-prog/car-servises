@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using System; // Добавьте эту строку
 
 namespace car_servises
 {
@@ -15,13 +16,65 @@ namespace car_servises
 
             AutoScaleMode = AutoScaleMode.None;
 
-
             Load += BaseForm_Load;
+            FormClosing += BaseForm_FormClosing; // ДОБАВИТЬ
         }
 
         private void BaseForm_Load(object sender, System.EventArgs e)
         {
             ApplyStyles(this);
+
+            // ДОБАВИТЬ: Не отслеживаем активность на форме авторизации
+            if (!(this is Form1))
+            {
+                // Подписываемся на событие бездействия
+                ActivityTracker.Instance.UserInactive += OnUserInactive;
+
+                // Запускаем отслеживание для этой формы
+                ActivityTracker.Instance.StartTracking(this);
+            }
+        }
+
+        // ДОБАВИТЬ: Обработчик закрытия формы
+        private void BaseForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Отписываемся от события
+            ActivityTracker.Instance.UserInactive -= OnUserInactive;
+        }
+
+        // ДОБАВИТЬ: Обработчик бездействия
+        private void OnUserInactive(object sender, EventArgs e)
+        {
+            // Этот метод выполняется в потоке таймера, поэтому используем Invoke
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(() => HandleInactivity()));
+            }
+            else
+            {
+                HandleInactivity();
+            }
+        }
+
+        // ДОБАВИТЬ: Метод обработки бездействия
+        private void HandleInactivity()
+        {
+            // Показываем сообщение (опционально)
+            MessageBox.Show("Вы были заблокированы за бездействие.", "Блокировка",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Закрываем все формы, кроме Form1
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form is Form1)
+                {
+                    form.Show();
+                }
+                else
+                {
+                    form.Close();
+                }
+            }
         }
 
         private void ApplyStyles(Control parent)
@@ -88,4 +141,3 @@ namespace car_servises
         }
     }
 }
-
