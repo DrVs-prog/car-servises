@@ -11,6 +11,7 @@ namespace car_servises
     {
         private string _userRole;
         private DataTable originalEmployeesData;
+        private System.Windows.Forms.Button btnDetails;
         private System.Windows.Forms.Panel pnlSearch;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.ComboBox cmbSearchColumn;
@@ -27,6 +28,8 @@ namespace car_servises
             InitializeComponent();
             ConnectSearchEvents();
             LoadEmployees();
+            InitializeDetailsButton();
+            dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
         }
 
         public Employes(string userRole = "")
@@ -45,6 +48,51 @@ namespace car_servises
             rbAsc.CheckedChanged += rbSortDirection_CheckedChanged;
             rbDesc.CheckedChanged += rbSortDirection_CheckedChanged;
             btnResetFilters.Click += btnResetFilters_Click;
+        }
+
+        private void InitializeDetailsButton()
+        {
+            // Создаем кнопку "ПРОСМОТР"
+            btnDetails = new Button();
+            btnDetails.Text = "ПРОСМОТР";
+
+            // РАСПОЛОЖЕНИЕ - подберите координаты под вашу форму!
+            // Обычно кнопки находятся внизу формы, например:
+            btnDetails.Location = new Point(538, 394); // X, Y
+
+            btnDetails.Size = new Size(133, 46);
+            btnDetails.Click += btnDetails_Click;
+            AppStyles.ApplyButtonStyle(btnDetails);
+            this.Controls.Add(btnDetails);
+        }
+
+        private void OpenDetailsForm()
+        {
+            if (dataGridView1.CurrentRow != null)
+            {
+                int employeeId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["ID"].Value);
+                EmployeeDetailsForm detailsForm = new EmployeeDetailsForm(employeeId);
+                detailsForm.ShowDialog(); // Открываем как диалог
+            }
+            else
+            {
+                MessageBox.Show("Выберите сотрудника для просмотра.", "Информация",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void btnDetails_Click(object sender, EventArgs e)
+        {
+            OpenDetailsForm();
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Не открываем при двойном клике на заголовке
+            if (e.RowIndex >= 0)
+            {
+                OpenDetailsForm();
+            }
         }
 
         private void LoadEmployees()
@@ -94,6 +142,8 @@ namespace car_servises
                 MessageBox.Show($"Ошибка загрузки сотрудников: {ex.Message}");
             }
         }
+
+
 
         private void FillSearchColumns()
         {
