@@ -131,6 +131,40 @@ namespace car_servises
             }
         }
 
+        private void InitializeLockTimer()
+        {
+            lockTimer = new Timer();
+            lockTimer.Interval = 1000; // 1 секунда
+            lockTimer.Tick += lockTimer_Tick;
+        }
+
+        private void StartLockout()
+        {
+            lockSecondsRemaining = 10;
+            lblTimer.Visible = true;
+            lblTimer.Text = $"Блокировка: {lockSecondsRemaining} сек.";
+            button1.Enabled = false;
+            btnRefreshCaptcha.Enabled = false;
+            lockTimer.Start();
+        }
+
+        private void lockTimer_Tick(object sender, EventArgs e)
+        {
+            lockSecondsRemaining--;
+
+            if (lockSecondsRemaining <= 0)
+            {
+                lockTimer.Stop();
+                lblTimer.Visible = false;
+                button1.Enabled = true;
+                btnRefreshCaptcha.Enabled = true;
+                GenerateNewCaptcha();
+            }
+            else
+            {
+                lblTimer.Text = $"Блокировка: {lockSecondsRemaining} сек.";
+            }
+        }
 
         private void ApplyStyles()
         {
