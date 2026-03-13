@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E2EE0A88-9DE8-46AB-BE93-96C1822EA5E7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>car_servises</RootNamespace>
+    <AssemblyName>car_servises</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=3.3.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.3.3.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml.Framework, Version=3.3.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.Framework.3.3.0\lib\net46\DocumentFormat.OpenXml.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="MySql.Data, Version=9.1.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\MySQL\MySQL Connector NET 9.1\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdvancedSearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdvancedSearchForm.Designer.cs">
+      <DependentUpon>AdvancedSearchForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AppStyles.cs" />
+    <Compile Include="BaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CurrentUser.cs" />
+    <Compile Include="NewFolder1\car\AddEditCarForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\car\AddEditCarForm.Designer.cs">
+      <DependentUpon>AddEditCarForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\car\ClientCarsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\car\ClientCarsForm.Designer.cs">
+      <DependentUpon>ClientCarsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\employes\AddEditEmployeeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\employes\AddEditEmployeeForm.Designer.cs">
+      <DependentUpon>AddEditEmployeeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\order\AddEditOrderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\order\AddEditOrderForm.Designer.cs">
+      <DependentUpon>AddEditOrderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\parts\PartImageViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\parts\PartImageViewer.Designer.cs">
+      <DependentUpon>PartImageViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\service\AddEditServiceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\service\AddEditServiceForm.Designer.cs">
+      <DependentUpon>AddEditServiceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\client\AddEditClientForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\client\AddEditClientForm.Designer.cs">
+      <DependentUpon>AddEditClientForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\parts\AddEditPartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\parts\AddEditPartForm.Designer.cs">
+      <DependentUpon>AddEditPartForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\client\Clients.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\client\Clients.Designer.cs">
+      <DependentUpon>Clients.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DatabaseHelper.cs" />
+    <Compile Include="NewFolder1\order\Order.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\order\Order.Designer.cs">
+      <DependentUpon>Order.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\parts\Parts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\parts\Parts.Designer.cs">
+      <DependentUpon>Parts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\Roles\AdminForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\Roles\AdminForm.Designer.cs">
+      <DependentUpon>AdminForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\employes\Employes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\employes\Employes.Designer.cs">
+      <DependentUpon>Employes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\Roles\ManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\Roles\ManagerForm.Designer.cs">
+      <DependentUpon>ManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\Roles\MechanicForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\Roles\MechanicForm.Designer.cs">
+      <DependentUpon>MechanicForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="NewFolder1\Roles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\Roles.Designer.cs">
+      <DependentUpon>Roles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewFolder1\service\Services.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\service\Services.Designer.cs">
+      <DependentUpon>Services.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SearchHelper.cs" />
+    <Compile Include="SimpleSearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SimpleSearchForm.Designer.cs">
+      <DependentUpon>SimpleSearchForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AdvancedSearchForm.resx">
+      <DependentUpon>AdvancedSearchForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BaseForm.resx">
+      <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\car\AddEditCarForm.resx">
+      <DependentUpon>AddEditCarForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\car\ClientCarsForm.resx">
+      <DependentUpon>ClientCarsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\employes\AddEditEmployeeForm.resx">
+      <DependentUpon>AddEditEmployeeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\order\AddEditOrderForm.resx">
+      <DependentUpon>AddEditOrderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\parts\PartImageViewer.resx">
+      <DependentUpon>PartImageViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\service\AddEditServiceForm.resx">
+      <DependentUpon>AddEditServiceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\client\AddEditClientForm.resx">
+      <DependentUpon>AddEditClientForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\parts\AddEditPartForm.resx">
+      <DependentUpon>AddEditPartForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\client\Clients.resx">
+      <DependentUpon>Clients.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\order\Order.resx">
+      <DependentUpon>Order.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\parts\Parts.resx">
+      <DependentUpon>Parts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\Roles\AdminForm.resx">
+      <DependentUpon>AdminForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\employes\Employes.resx">
+      <DependentUpon>Employes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="NewFolder1\Roles.resx">
+      <DependentUpon>Roles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\Roles\ManagerForm.resx">
+      <DependentUpon>ManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\Roles\MechanicForm.resx">
+      <DependentUpon>MechanicForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFolder1\service\Services.resx">
+      <DependentUpon>Services.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SimpleSearchForm.resx">
+      <DependentUpon>SimpleSearchForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

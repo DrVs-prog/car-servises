@@ -1,0 +1,29 @@
+## Результаты сборки
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.user
+
+## Настройки Visual Studio
+.vs/
+*.suo
+*.user
+*.sln.docstates
+
+## Файлы базы данных
+*.mdf
+*.ldf
+
+## Временные файлы
+*.tmp
+*.log
+*.cache
+
+## Файлы конфигурации
+appsettings.json
+*.config.user
+
+## Исключение для дампа БД (этот файл нужен!)
+!database_dump.sql
