@@ -16,6 +16,7 @@ namespace car_servises
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            var tracker = ActivityTracker.Instance;
             Application.Run(new Form1());
         }
     }
