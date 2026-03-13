@@ -13,12 +13,28 @@ namespace car_servises
 {
     public partial class Form1 : Form
     {
+
+
         private bool isPasswordVisible = false;
+        private int failedAttempts = 0;
+        private bool showCaptcha = false;
+        private CaptchaGenerator captchaGenerator;
+        private Timer lockTimer;
+        private int lockSecondsRemaining = 0;
+
+        // Элементы управления
+        private PictureBox pictureBoxCaptcha;
+        private TextBox textBoxCaptcha;
+        private Button btnRefreshCaptcha;
+        private Label lblTimer;
         public Form1()
         {
             InitializeComponent();
             SetupPasswordVisibility();
             ApplyStyles();
+
+            InitializeCaptchaControls();
+            InitializeLockTimer();
 
             // Проверка подключения к БД при запуске
             if (!DatabaseHelper.TestConnection())
@@ -26,6 +42,95 @@ namespace car_servises
                 MessageBox.Show("Не удалось подключиться к базе данных. Проверьте настройки подключения.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void InitializeCaptchaControls()
+        {
+            // Инициализация генератора CAPTCHA
+            captchaGenerator = new CaptchaGenerator();
+
+            // PictureBox для CAPTCHA
+            pictureBoxCaptcha = new PictureBox();
+            pictureBoxCaptcha.Location = new Point(50, 170);
+            pictureBoxCaptcha.Size = new Size(200, 60);
+            pictureBoxCaptcha.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBoxCaptcha.BorderStyle = BorderStyle.FixedSingle;
+            pictureBoxCaptcha.Visible = false;
+            this.Controls.Add(pictureBoxCaptcha);
+
+            // TextBox для ввода CAPTCHA
+            textBoxCaptcha = new TextBox();
+            textBoxCaptcha.Location = new Point(50, 240);
+            textBoxCaptcha.Size = new Size(200, 30);
+            textBoxCaptcha.Font = AppStyles.NormalFont;
+            textBoxCaptcha.Visible = false;
+            textBoxCaptcha.MaxLength = 4;
+            textBoxCaptcha.CharacterCasing = CharacterCasing.Upper;
+            this.Controls.Add(textBoxCaptcha);
+
+            // Кнопка обновления CAPTCHA
+            btnRefreshCaptcha = new Button();
+            btnRefreshCaptcha.Location = new Point(260, 170);
+            btnRefreshCaptcha.Size = new Size(90, 60);
+            btnRefreshCaptcha.Text = "Обновить";
+            btnRefreshCaptcha.Font = AppStyles.NormalFont;
+            btnRefreshCaptcha.Visible = false;
+            btnRefreshCaptcha.Click += btnRefreshCaptcha_Click;
+            AppStyles.ApplyButtonStyle(btnRefreshCaptcha);
+            this.Controls.Add(btnRefreshCaptcha);
+
+            // Метка для таймера
+            lblTimer = new Label();
+            lblTimer.Location = new Point(50, 310);
+            lblTimer.Size = new Size(300, 30);
+            lblTimer.Font = AppStyles.NormalFont;
+            lblTimer.ForeColor = Color.Red;
+            lblTimer.TextAlign = ContentAlignment.MiddleCenter;
+            lblTimer.Visible = false;
+            this.Controls.Add(lblTimer);
+        }
+
+        private void ShowCaptchaControls(bool show)
+        {
+            showCaptcha = show;
+            pictureBoxCaptcha.Visible = show;
+            textBoxCaptcha.Visible = show;
+            btnRefreshCaptcha.Visible = show;
+
+            if (show)
+            {
+                GenerateNewCaptcha();
+                // Сдвигаем кнопки ниже
+                button1.Location = new Point(50, 340);
+                button2.Location = new Point(50, 390);
+                // Увеличиваем размер формы
+                this.Size = new Size(400, 500);
+            }
+            else
+            {
+                // Возвращаем кнопки на место
+                button1.Location = new Point(50, 200);
+                button2.Location = new Point(50, 250);
+                this.Size = new Size(400, 350);
+            }
+        }
+
+        private void GenerateNewCaptcha()
+        {
+            captchaGenerator.RefreshCaptcha();
+            Bitmap captchaImage = captchaGenerator.CreateCaptchaImage(200, 60);
+            pictureBoxCaptcha.Image = captchaImage;
+            textBoxCaptcha.Clear();
+            textBoxCaptcha.Focus();
+        }
+
+        private void btnRefreshCaptcha_Click(object sender, EventArgs e)
+        {
+            if (lockSecondsRemaining <= 0)
+            {
+                GenerateNewCaptcha();
+            }
+        }
+
 
         private void ApplyStyles()
         {
