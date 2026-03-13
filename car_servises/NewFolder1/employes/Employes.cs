@@ -52,18 +52,31 @@ namespace car_servises
             try
             {
                 string query = @"
-                    SELECT 
-                        e.employee_id AS 'ID',
-                        e.full_name AS 'ФИО',
-                        e.job_title AS 'Должность',
-                        e.hire_date AS 'Дата найма',
-                        r.role_name AS 'Роль',
-                        e.login AS 'Логин',
-                        (SELECT COUNT(*) FROM orders WHERE employee_id = e.employee_id) AS 'Количество заказов'
-                    FROM employees e
-                    LEFT JOIN roles r ON e.role_id = r.role_id
-                    ORDER BY e.full_name";
-
+            SELECT 
+                e.employee_id AS 'ID',
+                
+                -- Маскируем ФИО: фамилия + инициалы
+                CONCAT(
+                    SUBSTRING_INDEX(e.full_name, ' ', 1),
+                    ' ',
+                    LEFT(SUBSTRING_INDEX(SUBSTRING_INDEX(e.full_name, ' ', 2), ' ', -1), 1),
+                    '.',
+                    CASE 
+                        WHEN LENGTH(e.full_name) - LENGTH(REPLACE(e.full_name, ' ', '')) >= 2 
+                        THEN CONCAT(' ', LEFT(SUBSTRING_INDEX(SUBSTRING_INDEX(e.full_name, ' ', 3), ' ', -1), 1), '.')
+                        ELSE ''
+                    END
+                ) AS 'ФИО',
+                
+                e.job_title AS 'Должность',
+                DATE_FORMAT(e.hire_date, '%d.%m.%Y') AS 'Дата найма',
+                r.role_name AS 'Роль',
+                e.login AS 'Логин',
+                
+                (SELECT COUNT(*) FROM orders WHERE employee_id = e.employee_id) AS 'Количество заказов'
+            FROM employees e
+            LEFT JOIN roles r ON e.role_id = r.role_id
+            ORDER BY e.full_name";
 
                 DataTable employees = DatabaseHelper.ExecuteQuery(query);
 
@@ -71,12 +84,10 @@ namespace car_servises
                 dataGridView1.DataSource = employees;
 
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                //dataGridView1.Columns["Зарплата"].DefaultCellStyle.Format = "C2";
                 dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
                 FillSearchColumns();
                 ApplySearchStyles();
-
             }
             catch (Exception ex)
             {
